@@ -172,6 +172,15 @@ func writeBlock(w http.ResponseWriter, r *http.Request) {
 	*/
 
 	BlockChain.AddBlock(checkoutitem)
+	resp, err := json.MarshalIndent(checkoutitem, "", " ")
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		log.Printf("could not marshal payload: %v", err)
+		w.Write([]byte("could not write block"))
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	w.Write(resp)
 
 }
 
